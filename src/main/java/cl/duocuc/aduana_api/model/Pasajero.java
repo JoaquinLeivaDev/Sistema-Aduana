@@ -3,68 +3,46 @@ package cl.duocuc.aduana_api.model;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-/*
- * @Entity indica que esta clase será una entidad JPA
- * y se mapeará a una tabla de la base de datos.
- */
 @Entity
-
-/*
- * @Table define el nombre exacto de la tabla en la BD.
- */
 @Table(name = "pasajero")
-
-/*
- * Lombok:
- * @Getter/@Setter generan los métodos de acceso.
- * @NoArgsConstructor genera constructor vacío.
- * @AllArgsConstructor genera constructor con todos los atributos.
- */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Pasajero {
 
-    /*
-     * Clave primaria de la entidad.
-     * @GeneratedValue(strategy = GenerationType.IDENTITY)
-     * permite que la BD genere el "id" automáticamente.
-     */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Te recomiendo IDENTITY para bases de datos modernas
     @Column(name = "id_pasajero")
     private Long idPasajero;
 
-    /*
-     * RUT del pasajero.
-     * Se define como obligatorio, de largo 10 y único.
-     */
-    @Column(name = "rut", nullable = false, length = 10, unique = true)
+    @Column(name = "rut", nullable = false, length = 12, unique = true) // Cuidado con el largo del RUT!
     private String rut;
 
-    /*
-     * Nombres del pasajero.
-     */
-    @Column(name = "nombres", nullable = false, length = 100)
-    private String nombres;
+    @Column(name = "nombre", nullable = false, length = 100)
+    private String nombre;
 
-    /*
-     * Apellidos del pasajero.
-     */
     @Column(name = "apellidos", nullable = false, length = 100)
     private String apellidos;
 
-    /*
-     * Fecha de nacimiento del pasajero.
-     */
     @Column(name = "fecha_nacimiento", nullable = false)
-    private LocalDate fechaNacimiento;
+    private LocalDate fechaNac;
 
-    /*
-     * Correo electrónico del pasajero.
-     */
     @Column(name = "correo", length = 100, unique = true)
     private String correo;
+
+    // Un Pasajero tiene muchos documentos
+    @OneToMany(mappedBy = "pasajero", cascade = CascadeType.ALL)
+    private List<Documento> documentos = new ArrayList<>();
+
+    // Un Pasajero tiene un turno
+    @OneToOne(mappedBy = "pasajero", cascade = CascadeType.ALL)
+    private Turno turno;
+
+    // Un Pasajero tiene muchas declaraciones
+    @OneToMany(mappedBy = "pasajero", cascade = CascadeType.ALL)
+    private List<Declaracion> declaraciones = new ArrayList<>();
 }
