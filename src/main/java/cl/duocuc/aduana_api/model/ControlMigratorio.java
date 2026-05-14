@@ -17,7 +17,8 @@ public class ControlMigratorio {
     @Column(nullable = false, length = 20)
     private String estado; // Pendiente, Aprobado, Rechazado
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
+    @Column(columnDefinition = "CLOB")
     private String observaciones;
 
     @OneToOne

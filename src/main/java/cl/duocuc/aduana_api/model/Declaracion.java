@@ -18,8 +18,8 @@ public class Declaracion {
 
     @Column(name = "tipo", nullable = false, length = 50)
     private String tipo; // "Alimentos", "Mascotas", etc.
-
-    @Column(name = "detalles", columnDefinition = "TEXT")
+    @Lob
+    @Column(name = "detalles", columnDefinition = "CLOB")
     private String detalles;
 
     /*
