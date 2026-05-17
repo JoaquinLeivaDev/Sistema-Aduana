@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface VehiculoRepository extends JpaRepository<Vehiculo, Long> {
-
-    // Spring Data JPA creará la consulta SQL automáticamente
-    // SELECT * FROM vehiculo WHERE patente = ?
     Vehiculo findByPatente(String patente);
+    boolean existsByPatente(String patente);
 }

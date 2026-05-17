@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PasajeroRepository extends JpaRepository<Pasajero, Long> {
 
-    // Spring Data JPA crea esta consulta mágicamente por el nombre del método
-    // ¡Es vital para buscar pasajeros en el control fronterizo!
+    // Busca pasajero por RUT — fundamental para el control fronterizo
     Pasajero findByRut(String rut);
+
+    // Verifica si ya existe un RUT — usado en registrarPasajero para evitar duplicados
+    boolean existsByRut(String rut);
 }

@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TurnoRepository extends JpaRepository<Turno, Long> {
+    Turno findByPasajeroIdPasajero(Long idPasajero);
+    boolean existsByPasajeroIdPasajero(Long idPasajero);
 }

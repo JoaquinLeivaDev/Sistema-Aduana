@@ -11,7 +11,8 @@ import java.time.LocalDate;
 public class Vehiculo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vehiculo_seq")
+    @SequenceGenerator(name = "vehiculo_seq", sequenceName = "VEHICULO_SEQ", allocationSize = 1)
     @Column(name = "id_vehiculo")
     private Long id;
 
@@ -19,22 +20,16 @@ public class Vehiculo {
     private String patente;
 
     @Column(name = "tipo", nullable = false, length = 50)
-    private String tipo; // Ej: "Particular", "Diplomático"
+    private String tipo;
 
     @Column(name = "fecha_admision", nullable = false)
     private LocalDate fechaAdmision;
 
-    /*
-     * Relación uno a uno con Documento.
-     * Un vehículo tiene un formulario SATVA (Documento) asociado.
-     */
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_documento", unique = true)
     private Documento documento;
 
-    // Método de negocio (la lógica real va en el Service, esto es solo la firma)
     public boolean generarSATVA() {
-        // Aquí irá la lógica que invocará el Servicio
-        return true;
+        return this.documento != null && this.documento.isEstadoValidacion();
     }
 }

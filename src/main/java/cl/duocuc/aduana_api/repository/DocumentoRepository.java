@@ -2,8 +2,9 @@ package cl.duocuc.aduana_api.repository;
 
 import cl.duocuc.aduana_api.model.Documento;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
-@Repository
 public interface DocumentoRepository extends JpaRepository<Documento, Long> {
+    // Busca todos los documentos de un pasajero por su id
+    List<Documento> findByPasajeroIdPasajero(Long idPasajero);
 }
