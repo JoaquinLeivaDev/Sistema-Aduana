@@ -1,12 +1,14 @@
 package cl.duocuc.aduana_api.service;
 
 import cl.duocuc.aduana_api.dto.LoginRequestDTO;
+import cl.duocuc.aduana_api.dto.ReporteResponseDTO;
 import cl.duocuc.aduana_api.dto.UsuarioRequestDTO;
 import cl.duocuc.aduana_api.dto.UsuarioResponseDTO;
 import cl.duocuc.aduana_api.exception.RolNotFoundException;
 import cl.duocuc.aduana_api.exception.UsuarioNotFoundException;
 import cl.duocuc.aduana_api.model.Rol;
 import cl.duocuc.aduana_api.model.Usuario;
+import cl.duocuc.aduana_api.repository.ReporteRepository;
 import cl.duocuc.aduana_api.repository.RolRepository;
 import cl.duocuc.aduana_api.repository.UsuarioRepository;
 import org.slf4j.Logger;
@@ -21,11 +23,14 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
+    private final ReporteRepository reporteRepository;
 
     public UsuarioService(UsuarioRepository usuarioRepository,
-                          RolRepository rolRepository) {
+                          RolRepository rolRepository,
+                          ReporteRepository reporteRepository) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
+        this.reporteRepository = reporteRepository;
     }
 
     public List<UsuarioResponseDTO> obtenerTodos() {
@@ -108,6 +113,24 @@ public class UsuarioService {
         }
         usuarioRepository.deleteById(id);
         log.info("Usuario con id {} eliminado exitosamente", id);
+    }
+
+    public List<ReporteResponseDTO> obtenerReportesPorUsuario(Long id) {
+        log.info("Obteniendo reportes del usuario con id: {}", id);
+        if (!usuarioRepository.existsById(id)) {
+            log.error("Usuario con id {} no encontrado", id);
+            throw new UsuarioNotFoundException("Usuario con id " + id + " no encontrado");
+        }
+        return reporteRepository.findByUsuario_Id(id)
+                .stream()
+                .map(r -> new ReporteResponseDTO(
+                        r.getIdReporte(),
+                        r.getTipo(),
+                        r.getFecha(),
+                        r.getDatos(),
+                        r.getUsuario().getId()
+                ))
+                .toList();
     }
 
     private UsuarioResponseDTO toResponseDTO(Usuario u) {

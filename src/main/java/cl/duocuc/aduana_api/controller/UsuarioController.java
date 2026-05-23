@@ -34,6 +34,12 @@ public class UsuarioController {
         return ResponseEntity.ok(ApiResponse.ok(service.buscarPorId(id), "Usuario encontrado"));
     }
 
+    @GetMapping("/{id}/reportes")
+    public ResponseEntity<ApiResponse<List<ReporteResponseDTO>>> obtenerReportes(@PathVariable Long id) {
+        log.info("GET /api/v1/usuarios/{}/reportes", id);
+        return ResponseEntity.ok(ApiResponse.ok(service.obtenerReportesPorUsuario(id), "Reportes del usuario obtenidos"));
+    }
+
     @PostMapping
     public ResponseEntity<ApiResponse<UsuarioResponseDTO>> registrar(
             @RequestBody @Valid UsuarioRequestDTO dto) {
@@ -42,7 +48,6 @@ public class UsuarioController {
                 .body(ApiResponse.ok(service.registrarUsuario(dto), "Usuario registrado"));
     }
 
-    // Endpoint clave del dominio: login
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<UsuarioResponseDTO>> login(
             @RequestBody @Valid LoginRequestDTO dto) {
@@ -50,7 +55,6 @@ public class UsuarioController {
         return ResponseEntity.ok(ApiResponse.ok(service.login(dto), "Login exitoso"));
     }
 
-    // Endpoint logout — documenta el comportamiento del diagrama
     @PostMapping("/{id}/logout")
     public ResponseEntity<ApiResponse<Void>> logout(@PathVariable Long id) {
         log.info("POST /api/v1/usuarios/{}/logout", id);
