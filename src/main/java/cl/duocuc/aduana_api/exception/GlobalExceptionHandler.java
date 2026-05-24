@@ -82,4 +82,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ApiResponse.error(ex.getMessage()));
     }
+
+    @ExceptionHandler(ReporteNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleReporteNotFound(ReporteNotFoundException ex) {
+        log.error("Reporte no encontrado: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(ex.getMessage()));
+    }
 }
