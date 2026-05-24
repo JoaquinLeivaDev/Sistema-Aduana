@@ -14,6 +14,7 @@ import cl.duocuc.aduana_api.repository.UsuarioRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
@@ -33,6 +34,7 @@ public class UsuarioService {
         this.reporteRepository = reporteRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<UsuarioResponseDTO> obtenerTodos() {
         log.info("Obteniendo lista de todos los usuarios");
         return usuarioRepository.findAll()
@@ -41,6 +43,7 @@ public class UsuarioService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public UsuarioResponseDTO buscarPorId(Long id) {
         log.info("Buscando usuario con id: {}", id);
         Usuario usuario = usuarioRepository.findById(id)
@@ -51,6 +54,7 @@ public class UsuarioService {
         return toResponseDTO(usuario);
     }
 
+    @Transactional
     public UsuarioResponseDTO registrarUsuario(UsuarioRequestDTO dto) {
         log.info("Registrando usuario: {}", dto.getUsername());
 
@@ -73,6 +77,7 @@ public class UsuarioService {
         return toResponseDTO(guardado);
     }
 
+    @Transactional(readOnly = true)
     public UsuarioResponseDTO login(LoginRequestDTO dto) {
         log.info("Intento de login para usuario: {}", dto.getUsername());
 
@@ -91,6 +96,7 @@ public class UsuarioService {
         return toResponseDTO(usuario);
     }
 
+    @Transactional
     public UsuarioResponseDTO actualizarUsuario(Long id, UsuarioRequestDTO dto) {
         log.info("Actualizando usuario con id: {}", id);
         Usuario usuario = usuarioRepository.findById(id)
@@ -105,6 +111,7 @@ public class UsuarioService {
         return toResponseDTO(actualizado);
     }
 
+    @Transactional
     public void eliminarUsuario(Long id) {
         log.info("Eliminando usuario con id: {}", id);
         if (!usuarioRepository.existsById(id)) {
@@ -115,6 +122,7 @@ public class UsuarioService {
         log.info("Usuario con id {} eliminado exitosamente", id);
     }
 
+    @Transactional(readOnly = true)
     public List<ReporteResponseDTO> obtenerReportesPorUsuario(Long id) {
         log.info("Obteniendo reportes del usuario con id: {}", id);
         if (!usuarioRepository.existsById(id)) {
