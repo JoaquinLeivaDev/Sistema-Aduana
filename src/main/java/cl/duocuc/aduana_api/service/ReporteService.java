@@ -2,7 +2,8 @@ package cl.duocuc.aduana_api.service;
 
 import cl.duocuc.aduana_api.dto.ReporteRequestDTO;
 import cl.duocuc.aduana_api.dto.ReporteResponseDTO;
-import cl.duocuc.aduana_api.exception.PasajeroNotFoundException;
+import cl.duocuc.aduana_api.exception.ReporteNotFoundException;
+import cl.duocuc.aduana_api.exception.UsuarioNotFoundException;
 import cl.duocuc.aduana_api.model.Reporte;
 import cl.duocuc.aduana_api.model.Usuario;
 import cl.duocuc.aduana_api.repository.ReporteRepository;
@@ -39,7 +40,7 @@ public class ReporteService {
         Reporte reporte = reporteRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Reporte con id {} no encontrado", id);
-                    return new PasajeroNotFoundException("Reporte con id " + id + " no encontrado");
+                    return new ReporteNotFoundException("Reporte con id " + id + " no encontrado");
                 });
         return toResponseDTO(reporte);
     }
@@ -65,7 +66,7 @@ public class ReporteService {
         Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
                 .orElseThrow(() -> {
                     log.error("Usuario con id {} no encontrado", dto.getIdUsuario());
-                    return new PasajeroNotFoundException("Usuario con id " + dto.getIdUsuario() + " no encontrado");
+                    return new UsuarioNotFoundException("Usuario con id " + dto.getIdUsuario() + " no encontrado");
                 });
 
         Reporte reporte = new Reporte();
@@ -83,7 +84,7 @@ public class ReporteService {
         log.info("Eliminando reporte con id: {}", id);
         if (!reporteRepository.existsById(id)) {
             log.error("Reporte con id {} no encontrado", id);
-            throw new PasajeroNotFoundException("Reporte con id " + id + " no encontrado");
+            throw new ReporteNotFoundException("Reporte con id " + id + " no encontrado");
         }
         reporteRepository.deleteById(id);
         log.info("Reporte con id {} eliminado", id);
